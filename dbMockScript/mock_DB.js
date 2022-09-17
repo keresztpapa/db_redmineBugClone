@@ -11,6 +11,16 @@ var connection = mysql.createConnection({
 connection.connect();
 console.log("connected");
 
+connection.query("DELETE FROM bugs", function (err, result) {
+    if (err) throw err;
+    console.log("Bugs cleared");
+});
+
+connection.end();
+
+
+/*
+
 var sql1 = "INSERT INTO bugs (id, name) VALUE (1,'Mario')";
 var sql2 = "INSERT INTO bugs (id, name) VALUE (2,'Peter')";
 
@@ -29,4 +39,4 @@ connection.query("SELECT * FROM bugs", function (err, result, fields) {
   console.log(result);
 });
 
-connection.end();
+*/ 
