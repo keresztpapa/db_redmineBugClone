@@ -1,4 +1,4 @@
-
+var faker = require('faker');
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -15,9 +15,10 @@ connection.query("DELETE FROM bugs", function (err, result) {
     if (err) throw err;
     console.log("Bugs cleared");
 });
-
 connection.end();
 
+const randomName = faker.name.firstName();
+console.log(randomName);
 
 /*
 
