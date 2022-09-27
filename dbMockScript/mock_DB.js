@@ -15,39 +15,46 @@ console.log("connected");
 ///// DB Destroy
 connection.query("DROP TABLE IF EXISTS `user`;", function (err, result) {if (err) throw err;});
 connection.query("DROP TABLE IF EXISTS `bugs`;", function (err, result) {if (err) throw err;});
-
 console.log("DB dropped\n");
 
 ////  DB Tables creation
 
 let createUser =`create table if not exists user(
                   name varchar(255) not null,
-                  prev_ticket varchar(255),
                   pos varchar(255)
                 )`;
 
-let createBugs =`create table if not exists bugs(
-                  story_point int,
-                  tester varchar(255)
-                )`;
-
 connection.query(createUser, function (err, result) { if (err) throw err; console.log("User table added");});
-connection.query(createBugs, function (err, result) { if (err) throw err; console.log("Bugs table added");});
 
 
 ////// DB Mock data insertion
-
 ////// User
-var sql_UserName = "INSERT INTO user () VALUE ("+faker.name.firstName()+" "+faker.name.lastName()+"')";
-connection.query(sql1, function (err, result) { if (err) throw err; console.log("User.name added"); });
 
-for(i=0;i<Math.floor(Math.random() * 20);i++){
+for(i=0;i<10;i++){
+  console.log(i);
+  addUser(faker.name.firstName()+" "+faker.name.lastName());
+}
 
+console.log("Invoke connection end");
+connection.end();
+
+
+function addUser(fake_name){
+  var sql_UserName_query = "SELECT name FROM user WHERE user.name = '"+[fake_name]+"'";
+  var sql_UserName = "INSERT INTO user (name) VALUE ('"+[fake_name]+"')";
+
+  connection.query(sql_UserName_query, function (err, result) { 
+    if (err) throw err; 
+    if(result.length > 0) { 
+      addUser(faker.name.firstName()+" "+faker.name.lastName());
+    }else{ 
+      connection.query(sql_UserName, function (err, result) { if (err) throw err; console.log("User.name added"); });
+    } 
+  });
 }
 
 
 
-connection.end();
 
 /*
 
