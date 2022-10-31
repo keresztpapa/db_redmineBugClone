@@ -32,10 +32,10 @@ app.post('/clicked', urlencodedParser, (req, res) => {
     console.log(JSON.stringify(result)); 
     res.send(JSON.stringify(result));
     res.end()
-        /*    
-        console.log(JSON.stringify(result[0].name)); 
-        res.send(JSON.stringify(result[0].name));
-        res.end()
+    /*    
+    console.log(JSON.stringify(result[0].name)); 
+    res.send(JSON.stringify(result[0].name));
+    res.end()
     */
     });
 });

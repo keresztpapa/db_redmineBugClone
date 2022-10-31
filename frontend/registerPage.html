@@ -17,8 +17,13 @@
 </ul>
 
 <div id="container">
+    <form action = "http://127.0.0.1:3000/process_post" method = "POST">
+        First Name: <input type = "text" name = "first_name"> <br>
+        Last Name: <input type = "text" name = "last_name">
+        <input type = "submit" value = "Submit">
+    </form>
+
     <p id="db_list"></p>
-    <button id="db_button">Click</button>
 </div>
 
 <script src="client.js"></script>

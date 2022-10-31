@@ -1,0 +1,39 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    bottom: 80%;
+    right: 40%;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    padding: 8px;
+    background-color: aliceblue ;
+}
+
+#cim{ 
+    position: absolute;
+    left: 40%;
+    font-size: 50px;   
+    font-weight: bolder;
+    background-color: red;
+}
+#container{
+    position: absolute;
+    left: auto;
+    top: 30%;
+    margin: 0px;
+    border: 0px;
+    width: 100%;
+    background-color: aquamarine;
+}
+
+body{
+    background-color: aquamarine;
+}
