@@ -27,10 +27,16 @@ app.post('/process_post', urlencodedParser, function (req, res) {
     res.end(JSON.stringify(response));
 })
 
-app.post('/clicked', urlencodedParser, () => {
+app.post('/clicked', urlencodedParser, (req, res) => {
     con.query("SELECT name FROM user", function (err, result, fields) { 
+    console.log(JSON.stringify(result)); 
+    res.send(JSON.stringify(result));
+    res.end()
+        /*    
         console.log(JSON.stringify(result[0].name)); 
+        res.send(JSON.stringify(result[0].name));
+        res.end()
+    */
     });
 });
-
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
