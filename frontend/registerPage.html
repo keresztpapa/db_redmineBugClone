@@ -17,13 +17,19 @@
 </ul>
 
 <div id="container">
-    <form action = "http://127.0.0.1:3000/process_post" method = "POST">
+    <form action = "/add_user" method = "POST">
         First Name: <input type = "text" name = "first_name"> <br>
-        Last Name: <input type = "text" name = "last_name">
+        Last Name: <input type = "text" name = "last_name"><br>
+        Position: 
+        <select id="pos" name="position">
+            <option value="tester">tester</option>
+            <option value="frontend">frontend</option>
+            <option value="backend">backend</option>
+            <option value="fullstack">fullstack</option>
+            <option value="DevOps">DevOps</option>
+        </select>
         <input type = "submit" value = "Submit">
     </form>
-
-    <p id="db_list"></p>
 </div>
 
 <script src="client.js"></script>

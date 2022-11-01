@@ -18,10 +18,11 @@ var con = mysql.createConnection({
     database: 'bugzilla'
   });
 
-app.post('/process_post', urlencodedParser, function (req, res) {
+app.post('/add_user', urlencodedParser, function (req, res) {
     response = {
        first_name:req.body.first_name,
-       last_name:req.body.last_name
+       last_name:req.body.last_name,
+       pos:req.body.position
     };
     console.log(response);
     res.end(JSON.stringify(response));
