@@ -4,6 +4,7 @@ const port = 3000;
 const {resolve} = require('path');
 const index = resolve('../frontend/html/index.html');
 const register = resolve('../frontend/html/registerPage.html');
+const report = resolve('../frontend/html/report.html');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var path = require('path');
@@ -14,6 +15,7 @@ app.use(express.static(path.join(__dirname, '../frontend/html')));
 app.get('/', (req, res) => res.sendFile(index));
 app.get('/index', (req, res) => res.sendFile(index));
 app.get('/register', (req, res) => res.sendFile(register));
+app.get('/report', (req, res) => res.sendFile(report));
 
 var con = mysql.createConnection({
     host: 'localhost',
@@ -35,7 +37,7 @@ app.post('/add_user', urlencodedParser, function (req, res) {
     });
     console.log(response);
     res.end(JSON.stringify(response));
-})
+});
 
 app.post('/clicked', urlencodedParser, (req, res) => {
     con.query("SELECT name FROM user", function (err, result, fields) { 
@@ -47,4 +49,15 @@ app.post('/clicked', urlencodedParser, (req, res) => {
     */
     });
 });
+
+app.post('/list_devs', urlencodedParser, function (req, res) {
+    con.query(`SELECT name FROM fejleszto;`, function (err, result) {
+        if (err) throw err;
+        console.log(JSON.stringify(result));
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+    console.log("FETCH DONE");
+})
+
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));

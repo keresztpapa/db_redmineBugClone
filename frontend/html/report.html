@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="markup.css">
 </head>
 
-<body onload="load_devs();">
+<body>
 <p id="cim">Redmine Clone</p>
 
 <ul>
@@ -19,18 +19,13 @@
 
 <div class="wrapper fadeInDown">
     <div id="formContent">
-      <h2 class="active"> Fejlesztő regisztráció </h2>
+      <h2 class="active"> Hiba bejelentes </h2>
+      <form action = "/add_report" method = "POST">
 
-      <form action = "/dev_pos_tickets" method = "POST">
-        Fejlesztők:
-        <select id="developers_load" name="developers_load" placeholder="Developers">
-            <option value=""></option>
-        </select>
         <input type="submit" class="fadeIn fourth" value="Submit">
-    </form>
-</div>
-</div>
-
+      </form>
+    </div>
+  </div>
 
 <script src="client.js"></script>
 </body>

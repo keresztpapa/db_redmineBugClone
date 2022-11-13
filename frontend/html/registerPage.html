@@ -13,13 +13,16 @@
 
 <ul>
     <li><a href="index.html">Index</a></li>
-    <li><a href="registerPage.html">Regisztráció</a></li>
+    <li><a href="registerPage.html">Adat Bevitel</a></li>
+    <li><a href="report.html">Hiba bejelentes</a></li>
 </ul>
 
-<div id="container">
-    <form action = "/add_user" method = "POST">
-        First Name: <input type = "text" name = "first_name"> <br>
-        Last Name: <input type = "text" name = "last_name"><br>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+      <h2 class="active"> Fejlesztő regisztráció </h2>
+      <form action = "/add_user" method = "POST">
+        <input type="text" id="login" class="fadeIn second" name = "first_name" placeholder="First name">
+        <input type="text" id="password" class="fadeIn third" name = "last_name" placeholder="Last name">
         Position: 
         <select id="pos" name="position">
             <option value="tester">tester</option>
@@ -28,8 +31,9 @@
             <option value="fullstack">fullstack</option>
             <option value="DevOps">DevOps</option>
         </select>
-        <input type = "submit" value = "Submit">
+        <input type="submit" class="fadeIn fourth" value="Submit">
     </form>
+</div>
 </div>
 
 <script src="client.js"></script>
