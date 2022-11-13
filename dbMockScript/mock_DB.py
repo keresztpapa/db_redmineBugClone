@@ -85,18 +85,18 @@ db.execute("create table if not exists jogosultsag(pos varchar(255), admin bit, 
 
 #DB Mock data insertion
 #fejleszto_
-#for i in range(50):
-#  addDev()
+for i in range(50):
+  addDev()
     
-#for i in range(50):
-#  addkorabbi_javitasok()
+for i in range(50):
+  addkorabbi_javitasok()
 
-#addjavitasok()
-
+addjavitasok()
 addHibaReport()
+
 test("hibaBejelentes")
-#test("fejleszto")
-#test("korabbi_javitasok")
-#test("javitasok")
+test("fejleszto")
+test("korabbi_javitasok")
+test("javitasok")
 
 connection.commit()
