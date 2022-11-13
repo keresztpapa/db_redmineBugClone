@@ -10,10 +10,12 @@ def test(str):
     print(x)
 
 def addDev():
-    fake_name = faker.name()
+    faker_first = faker.first_name()
+    faker_last = faker.last_name()
+    fake_name = faker_first +" "+ faker_last
     position = ["tester", "frontend", "backend", "fullstack", "DevOps"]
     sql_fejleszto_Name_query = f"SELECT name FROM fejleszto WHERE fejleszto.name = '{fake_name}'"
-    sql_fejleszto_Name = f"INSERT INTO fejleszto (name, email, pos) VALUE ('{fake_name}','{fake_name}@gmail.com' ,'{position[random.randint(0, 4)]}')"
+    sql_fejleszto_Name = f"INSERT INTO fejleszto (name, email, pos) VALUE ('{fake_name}','{faker_first}_{faker_last}@gmail.com' ,'{position[random.randint(0, 4)]}')"
     db.execute(sql_fejleszto_Name_query)
     res = db.fetchall()
     if len(res) == 0:

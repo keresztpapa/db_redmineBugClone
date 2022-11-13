@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redmine Clone</title>
     <link rel="stylesheet" href="markup.css">
+    <script src="client.js"></script>
 </head>
 
 <body onload="load_devs();">
@@ -19,19 +20,17 @@
 
 <div class="wrapper fadeInDown">
     <div id="formContent">
-      <h2 class="active"> Fejlesztő regisztráció </h2>
+      <h2 class="active"> Fejlesztők listája </h2>
 
-      <form action = "/dev_pos_tickets" method = "POST">
+      <form>
         Fejlesztők:
         <select id="developers_load" name="developers_load" placeholder="Developers">
             <option value=""></option>
         </select>
-        <input type="submit" class="fadeIn fourth" value="Submit">
+        <input type="button" class="fadeIn fourth" value="Submit" onclick="send_dev_name()">
     </form>
 </div>
 </div>
 
-
-<script src="client.js"></script>
 </body>
 </html>

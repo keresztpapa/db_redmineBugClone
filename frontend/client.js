@@ -18,6 +18,26 @@ function load_devs(){
     });
 };
 
+function send_dev_name(){
+    let select = document.querySelector('#developers_load');
+    
+    let xhr = new XMLHttpRequest();
+    let url = "/dev_pos_tickets";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(JSON.stringify({ "name": select.value }));
+
+    fetch('/get_user', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        console.log(data);
+    }).catch((error) => {
+        console.log(error);
+    });
+}
+
+
 
 /*
 const db_bttn = document.getElementById('db_button');
