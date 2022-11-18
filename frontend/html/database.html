@@ -9,7 +9,7 @@
     <script src="client.js"></script>
 </head>
 
-<body onload="load_devs();">
+<body onload="load_db();">
 <p id="cim">Redmine Clone</p>
 
 <ul>
@@ -21,14 +21,14 @@
 
 <div class="wrapper fadeInDown">
     <div id="formContent">
-      <h2 class="active"> Fejlesztők listája </h2>
+      <h2 class="active"> Adatbázisok </h2>
 
       <form>
-        Fejlesztők:
-        <select id="developers_load" name="developers_load" placeholder="Developers">
+        DBs in use:
+        <select id="database_load" name="database_load" placeholder="DBs_in_use">
             <option value=""></option>
         </select>
-        <input type="button" class="fadeIn fourth" value="Submit" onclick="send_dev_name()">
+        <input type="button" class="fadeIn fourth" value="Submit" onclick="send_table_content()">
     </form>
 </div>
 </div>

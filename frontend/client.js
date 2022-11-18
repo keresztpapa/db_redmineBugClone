@@ -37,7 +37,42 @@ function send_dev_name(){
     });
 }
 
+function load_db(){
+    fetch('/load_tables', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        let select = document.getElementById("database_load");
+        
+        for(let i = 0; i< data.length;i++){
+            let opt = document.createElement('option');
+            opt.value = `${data[i].Tables_in_bugzilla}`;
+            opt.innerHTML = `${data[i].Tables_in_bugzilla}`;
+            select.appendChild(opt);
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+};
 
+function send_table_content(){
+    let select = document.querySelector('#database_load');
+    
+    let xhr = new XMLHttpRequest();
+    let url = "/load_table_content";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(JSON.stringify({ "table": select.value }));
+
+    fetch('/get_table_content_to_cells', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        console.log(data);
+    }).catch((error) => {
+        console.log(error);
+    });
+}
 
 /*
 const db_bttn = document.getElementById('db_button');
