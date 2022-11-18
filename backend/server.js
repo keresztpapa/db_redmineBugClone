@@ -118,9 +118,8 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
         if (error) throw error;
         console.log(JSON.stringify(result));
         
-        var data = JSON.stringify(result);
         app.post('/get_table_content_to_cells', urlencodedParser,function (req, res){
-            res.send(data);
+            res.send(JSON.stringify(result));
             res.end();
             });
         });

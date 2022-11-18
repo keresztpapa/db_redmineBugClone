@@ -295,3 +295,8 @@ input[type=text]:placeholder {
 * {
   box-sizing: border-box;
 }
+
+/*
+#db_table_row .db_table_cells{
+  border: 1px solid rgb(0, 0, 0) !important; 
+}
