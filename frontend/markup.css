@@ -5,8 +5,12 @@ ul {
     padding: 0;
     overflow: hidden;
     position: relative;
+    top: auto;
+    left: auto;
+    /*
     top: 20%;
     left: 20%;
+    */
     z-index: 100;
   }
   
@@ -19,7 +23,7 @@ display: block;
 padding: 8px;
 background-color: #dddddd;
 }
-
+/*
 #cim{ 
     position: absolute;
     left: 40%;
@@ -27,7 +31,7 @@ background-color: #dddddd;
     font-weight: bolder;
     background-color: red;
 }
-
+*/
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 
 /* BASIC */
@@ -296,7 +300,26 @@ input[type=text]:placeholder {
   box-sizing: border-box;
 }
 
-/*
-#db_table_row .db_table_cells{
-  border: 1px solid rgb(0, 0, 0) !important; 
+
+#db_table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#db_table td, #db_table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#db_table tr:nth-child(even){background-color: #f2f2f2;}
+
+#db_table tr:hover {background-color: #ddd;}
+
+#db_table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
 }
