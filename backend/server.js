@@ -103,7 +103,7 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
 
     
     for(i=0;i<str.length;i++){
-        if(str.charAt(i).match(/[a-zA-Z: ]/i)){
+        if(str.charAt(i).match(/[a-zA-Z_: ]/i)){
             if(str[i] == ":"){
                 strIndex++;
             }else{            
@@ -114,17 +114,27 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
     if(arr[1] == "") {
         console.log("No table selected");
     }else{    
-        con.query(`SELECT * FROM ${arr[1]};`, (error, result) => {
-        if (error) throw error;
-        console.log(JSON.stringify(result));
-        
-        app.post('/get_table_content_to_cells', urlencodedParser,function (req, res){
-            res.send(JSON.stringify(result));
-            res.end();
+
+        con.query(`DESCRIBE ${arr[1]};`, (error, result) => {
+            if (error) throw error;
+            console.log(JSON.stringify(result));
+            
+            app.post('/get_table_names', urlencodedParser,function (req, res){
+                res.send(JSON.stringify(result));
+                res.end();
+                });
             });
+
+        con.query(`SELECT * FROM ${arr[1]};`, (error, result) => {
+            if (error) throw error;
+            console.log(JSON.stringify(result));
+            
+            app.post('/get_table_content_to_cells', urlencodedParser,function (req, res){
+                res.send(JSON.stringify(result));
+                res.end();
+                });
         });
     }
-
 });
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
