@@ -61,41 +61,47 @@ function send_table_content(){
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.send(JSON.stringify({ "table": select.value }));
     var table_names = [""];
-
+    
     fetch('/get_table_names', {method: 'POST'}).then((res) =>{  
         if(res.ok) return res.json();
         throw new Error('Request failed');
     }).then((data) => {
-
-        console.log(data);
-
         let table = document.getElementById("db_table");
         let row = table.insertRow(); 
         for(let i = 0; i< data.length;i++){
-
             let cell = row.insertCell();  
             cell.innerHTML = `${data[i].Field}`;
             table_names[i] = data[i].Field;
         }
-
-        fetch('/get_table_content_to_cells', {method: 'POST'}).then((res) =>{
-            if(res.ok) return res.json();
-            throw new Error('Request failed');
-        }).then((data) => {
-            console.log("TÁBLA NEVEK:");
-            for(let i=0;i<table_names.length;i++){
-                console.log(table_names[i]);
-            }
-        }).catch((error) => {
-            console.log(error);
-        });
-
+        counter = data.length;
     }).catch((error) => {
         console.log(error);
     });
 
+    fetch('/get_table_content_to_cells', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        console.log(data);
+        let table = document.getElementById("db_table");
+        let row = table.insertRow(); 
+        for(let i = 0; i< data.length;i++){
+            
+            for (var key in data[i]){
+                let cell = row.insertCell();
+                cell.innerHTML = data[i][key];
+                //table_names[i] = data[i][key];
+            }
+            
+            //cell.innerHTML = data[i];
+            //table_names[i] = data[i];
 
-    
+            row = table.insertRow();
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+
 }
 
 /*

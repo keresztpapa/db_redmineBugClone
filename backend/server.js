@@ -88,53 +88,47 @@ app.post('/dev_pos_tickets', urlencodedParser,function (req, res) {
 app.post('/load_tables', urlencodedParser, function (req, res) {
     con.query(`show tables;`, function (err, result) {
         if (err) throw err;
-        console.log(JSON.stringify(result));
         res.send(JSON.stringify(result));
         res.end();
     });
-    console.log("FETCH DONE");
 });
 
+//var arr = ["", ""];
+//global.arr;
 app.post('/load_table_content', urlencodedParser, function (req, res) {
-    let arr = ["", ""];
+    global.arr = ["",""];
     let strIndex = 0;
     const str = new String(JSON.stringify(req.body));
-    console.log(str);
-
     
     for(i=0;i<str.length;i++){
         if(str.charAt(i).match(/[a-zA-Z_: ]/i)){
             if(str[i] == ":"){
                 strIndex++;
             }else{            
-                arr[strIndex] += str.charAt(i);
+                global.arr[strIndex] += str.charAt(i);
             }    
         }
     }
-    if(arr[1] == "") {
+    if(global.arr[1] == "") {
         console.log("No table selected");
     }else{    
-
-        con.query(`DESCRIBE ${arr[1]};`, (error, result) => {
-            if (error) throw error;
-            console.log(JSON.stringify(result));
-            
-            app.post('/get_table_names', urlencodedParser,function (req, res){
-                res.send(JSON.stringify(result));
-                res.end();
+            app.post('/get_table_names', urlencodedParser,(req, res) => {
+                con.query(`DESCRIBE ${global.arr[1]};`, (error, result) => {
+                    if (error) throw error;
+                    console.log("Post-on belül:\n"+JSON.stringify(result));
+                    res.send(JSON.stringify(result));
+                    res.end();
                 });
             });
-
-        con.query(`SELECT * FROM ${arr[1]};`, (error, result) => {
-            if (error) throw error;
-            console.log(JSON.stringify(result));
             
             app.post('/get_table_content_to_cells', urlencodedParser,function (req, res){
-                res.send(JSON.stringify(result));
-                res.end();
+                con.query(`SELECT * FROM ${global.arr[1]};`, (error, result) => {
+                    if (error) throw error;
+                    console.log(JSON.stringify(result));
+                    res.send(JSON.stringify(result));
+                    res.end();
                 });
-        });
+            });    
     }
 });
-
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
