@@ -73,9 +73,10 @@ function send_table_content(){
         for(let i = 0; i< data.length;i++){
             let cell = row.insertCell();  
             cell.innerHTML = `${data[i].Field}`;
-            table_names[i] = data[i].Field;
+            //table_names[i] = data[i].Field;
         }
-        counter = data.length;
+        let cell = row.insertCell();  
+        cell.innerHTML = "";
     }).catch((error) => {
         console.log(error);
     });
@@ -92,7 +93,9 @@ function send_table_content(){
                 for (var key in data[i]){
                     let cell = row.insertCell();
                     cell.innerHTML = data[i][key];
-                }
+                }                
+                let cell_mod = row.insertCell();  
+                cell_mod.innerHTML = `<button type="submit" id="mod_button" name="mod_button" onclick="modify(this)"> Mod </button>`;
                 row = table.insertRow();
             }
     }).catch((error) => {

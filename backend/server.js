@@ -109,26 +109,26 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
             }    
         }
     }
-    if(global.arr[1] == "") {
-        console.log("No table selected");
-    }else{    
-            app.post('/get_table_names', urlencodedParser,(req, res) => {
-                con.query(`DESCRIBE ${global.arr[1]};`, (error, result) => {
-                    if (error) throw error;
-                    console.log("Post-on belül:\n"+JSON.stringify(result));
-                    res.send(JSON.stringify(result));
-                    res.end();
-                });
+    if(global.arr[1] != "") {
+        app.post('/get_table_names', urlencodedParser,(req, res) => {
+            con.query(`DESCRIBE ${global.arr[1]};`, (error, result) => {
+                if (error) throw error;
+                console.log("Post-on belül:\n"+JSON.stringify(result));
+                res.send(JSON.stringify(result));
+                res.end();
             });
-            
-            app.post('/get_table_content_to_cells', urlencodedParser,function (req, res){
-                con.query(`SELECT * FROM ${global.arr[1]};`, (error, result) => {
-                    if (error) throw error;
-                    console.log(JSON.stringify(result));
-                    res.send(JSON.stringify(result));
-                    res.end();
-                });
-            });    
+        });
+        
+        app.post('/get_table_content_to_cells', urlencodedParser,function (req, res){
+            con.query(`SELECT * FROM ${global.arr[1]};`, (error, result) => {
+                if (error) throw error;
+                console.log(JSON.stringify(result));
+                res.send(JSON.stringify(result));
+                res.end();
+            });
+        });    
+    }else{
+        console.log("No table selected");    
     }
 });
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
