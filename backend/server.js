@@ -1,7 +1,9 @@
+const mysqldump = require('mysqldump');
 const express = require('express');
 const app = express();
 const port = 3000;
 const {resolve} = require('path');
+const cron = require("node-cron");
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var path = require('path');
@@ -28,6 +30,19 @@ var con = mysql.createConnection({
     password: 'admin',
     database: 'bugzilla'
 });
+
+cron.schedule('59 23 * * *', function(){
+    mysqldump({
+        connection: {
+            host: 'localhost',
+            user: 'root',
+            password: 'admin',
+            database: 'bugzilla',
+        },
+        dumpToFile: './backup.sql',
+    });
+});
+
 
 app.post('/add_user', urlencodedParser, function (req, res) {
     response = {
@@ -159,5 +174,37 @@ app.post('/mod_call', urlencodedParser,function (req, res){
     });
 */
 });  
+
+
+app.post('/query_story', urlencodedParser,function (req, res){
+    console.log("Story points:");
+    global.arr1 = ["",""];
+    let strIndex = 0;
+    const str = new String(JSON.stringify(req.body));
+    
+    for(i=0;i<str.length;i++){
+        if(str.charAt(i).match(/[a-zA-Z_: ]/i)){
+            if(str[i] == ":"){
+                strIndex++;
+            }else{            
+                global.arr1[strIndex] += str.charAt(i);
+            }    
+        }
+    }
+
+    console.log(global.arr1[1]);
+
+    app.post('/query_story_points', urlencodedParser,function (req, res){
+
+        let sql = `SELECT * FROM fejleszto WHERE name = '${global.arr1[1]}';`;
+        
+        con.query(sql, (error, result) => {
+            if (error) throw error;
+            res.send(JSON.stringify(result));
+            res.end();
+        });
+    });    
+
+});
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));

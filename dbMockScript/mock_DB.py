@@ -33,7 +33,7 @@ def addkorabbi_javitasok():
   #random id for korabbi_javitasoks
   random_string = ''.join(random.choice(string.ascii_uppercase) for i in range(10))
   sql_randkorabbi_javitasok_query = f"SELECT id FROM korabbi_javitasok WHERE korabbi_javitasok.id = '{random_string}';"
-  sql_randkorabbi_javitasok = f"INSERT INTO korabbi_javitasok (fejleszto_email, id) value ('{devs[random.randint(0, len(devs)-1)][0]}', '{random_string}')"
+  sql_randkorabbi_javitasok = f"INSERT INTO korabbi_javitasok (fejleszto_email, id) value ('{devs[random.randint(0, len(devs)-1)][0]}@gmail.com', '{random_string}')"
 
   db.execute(sql_randkorabbi_javitasok_query)
   res = db.fetchall()
@@ -87,10 +87,10 @@ db.execute("create table if not exists jogosultsag(pos varchar(255), admin bit, 
 
 #DB Mock data insertion
 #fejleszto_
-for i in range(50):
+for i in range(100):
   addDev()
     
-for i in range(50):
+for i in range(100):
   addkorabbi_javitasok()
 
 addjavitasok()

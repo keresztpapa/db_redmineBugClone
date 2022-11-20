@@ -9,7 +9,7 @@
     <script src="client.js"></script>
 </head>
 
-<body>
+<body onload="load_devs()">
 
 <ul>
     <li><a href="index.html">Index</a></li>
@@ -24,12 +24,16 @@
       <h2 class="active"> Összetett adatok </h2>
 
       <form>
-        :
+        Egy fejlesztő, melyik issue-kkal,<br> mennyi stroypoint-ot gyütött össze:<br>
         <select id="developers_load" name="developers_load" placeholder="Developers">
             <option value=""></option>
         </select>
-        <input type="button" class="fadeIn fourth" value="Submit" onclick="">
     </form>
+    <input type="button" class="fadeIn fourth" value="Submit" onclick="query_story();">
+    <table id="db_table">
+        <tr>
+        </tr>
+    </table>
 </div>
 </div>
 

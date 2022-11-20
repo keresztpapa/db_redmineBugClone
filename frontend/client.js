@@ -134,6 +134,28 @@ function delete_cell(r){
 
 }
 
+function query_story(){
+
+    let select = document.querySelector('#developers_load');
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", '/query_story', true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(JSON.stringify({ "table": select.value }));    
+    let table = document.getElementById("db_table");
+    table.innerHTML = "";
+
+    
+    fetch('/query_story_points', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        console.log(data);
+    }).catch((error) => {
+        console.log(error);
+    });
+    
+}
+
 /*
 const db_bttn = document.getElementById('db_button');
 
