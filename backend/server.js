@@ -113,7 +113,6 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
         app.post('/get_table_names', urlencodedParser,(req, res) => {
             con.query(`DESCRIBE ${global.arr[1]};`, (error, result) => {
                 if (error) throw error;
-                console.log("Post-on belül:\n"+JSON.stringify(result));
                 res.send(JSON.stringify(result));
                 res.end();
             });
@@ -122,7 +121,6 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
         app.post('/get_table_content_to_cells', urlencodedParser,function (req, res){
             con.query(`SELECT * FROM ${global.arr[1]};`, (error, result) => {
                 if (error) throw error;
-                console.log(JSON.stringify(result));
                 res.send(JSON.stringify(result));
                 res.end();
             });
@@ -131,4 +129,9 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
         console.log("No table selected");    
     }
 });
+
+app.post('/mod_call', urlencodedParser,function (req, res){
+    console.log("MOD CALL");
+});  
+
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));

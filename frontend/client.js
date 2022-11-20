@@ -1,4 +1,5 @@
 console.log('Client-side code running');
+
 function load_devs(){
     fetch('/list_devs', {method: 'POST'}).then((res) =>{
         if(res.ok) return res.json();
@@ -19,10 +20,8 @@ function load_devs(){
 
 function send_dev_name(){
     let select = document.querySelector('#developers_load');
-    
     let xhr = new XMLHttpRequest();
-    let url = "/dev_pos_tickets";
-    xhr.open("POST", url, true);
+    xhr.open("POST", "/dev_pos_tickets", true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.send(JSON.stringify({ "name": select.value }));
 
@@ -41,8 +40,7 @@ function load_db(){
         if(res.ok) return res.json();
         throw new Error('Request failed');
     }).then((data) => {
-        let select = document.getElementById("database_load");
-        
+        let select = document.getElementById("database_load");        
         for(let i = 0; i< data.length;i++){
             let opt = document.createElement('option');
             opt.value = `${data[i].Tables_in_bugzilla}`;
@@ -53,14 +51,14 @@ function load_db(){
         console.log(error);
     });
 };
+var table_names = [""];
 
 function send_table_content(){
     let select = document.querySelector('#database_load');
     let xhr = new XMLHttpRequest();
     xhr.open("POST", '/load_table_content', true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send(JSON.stringify({ "table": select.value }));
-    var table_names = [""];
+    xhr.send(JSON.stringify({ "table": select.value }));    
     let table = document.getElementById("db_table");
     table.innerHTML = "";
 
@@ -75,8 +73,10 @@ function send_table_content(){
             cell.innerHTML = `${data[i].Field}`;
             //table_names[i] = data[i].Field;
         }
-        let cell = row.insertCell();  
-        cell.innerHTML = "";
+        let cell1 = row.insertCell();  
+        cell1.innerHTML = "";
+        let cell2 = row.insertCell();  
+        cell2.innerHTML = "";
     }).catch((error) => {
         console.log(error);
     });
@@ -85,7 +85,7 @@ function send_table_content(){
         if(res.ok) return res.json();
         throw new Error('Request failed');
     }).then((data) => {
-            console.log(data);
+            //console.log(data);
             let table = document.getElementById("db_table");
             let row = table.insertRow(); 
             for(let i = 0; i< data.length;i++){
@@ -96,11 +96,40 @@ function send_table_content(){
                 }                
                 let cell_mod = row.insertCell();  
                 cell_mod.innerHTML = `<button type="submit" id="mod_button" name="mod_button" onclick="modify(this)"> Mod </button>`;
+
+                let cell_del = row.insertCell();
+                cell_del.innerHTML = `<button type="submit" id="del_button" name="del_button" onclick="delete_cell(this)"> Del </button>`;
+
                 row = table.insertRow();
             }
     }).catch((error) => {
         console.log(error);
     });
+}
+
+function modify(r){
+    let i = r.parentNode.parentNode.rowIndex;
+    let arr = [];
+    let str = "";
+    let str_arr = [];
+    let data = {};
+    //console.log(document.getElementById("db_table").rows[i].cells.length);
+    //console.log(document.getElementById("db_table").rows[i].cells[0]);
+
+    for(let j=0;j < document.getElementById("db_table").rows[i].cells.length-2; j++){
+        let prom = prompt(document.getElementById("db_table").rows[0].cells[j]+` modositasa:`, document.getElementById("db_table").rows[i].cells[j].innerHTML);
+        if(prom == null || prom == "") alert("Nothing");
+        if(prom == false) break;
+        arr.push(prom);
+        str += "X";
+        str_arr.push(str);
+    }
+    
+}
+
+
+function delete_cell(r){
+    let i = r.parentNode.parentNode.rowIndex;
 
 }
 
