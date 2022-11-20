@@ -131,7 +131,33 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
 });
 
 app.post('/mod_call', urlencodedParser,function (req, res){
-    console.log("MOD CALL");
+    let response = req.body;
+    let arr = ["","","",""];
+    let strIndex = 0;
+    let newArr = ["","","","","","",""];
+    const str = new String(JSON.stringify(response));
+    console.log(str);
+    
+    for(i=0;i<str.length;i++){
+        if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "dele" || i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2) == "mod"){
+            strIndex++;
+        }
+        if(str.charAt(i).match(/[a-zA-Z_:0-9.@ -]/i)){
+            arr[strIndex] += str.charAt(i);
+        }
+    }
+
+    console.log(arr);
+  
+    res.end();
+/*
+    con.query(`UPDATE user SET name = '${newArr[3]}', email = '${newArr[5]}', birth = '${newArr[4]}' WHERE name = '${newArr[0]}' AND email = '${newArr[2]}'`, function (err, result) {
+        if (err) throw err;
+        console.log("UPDATED");
+        console.log(JSON.stringify(result));
+        res.end();
+    });
+*/
 });  
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));

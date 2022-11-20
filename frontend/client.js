@@ -110,8 +110,6 @@ function send_table_content(){
 function modify(r){
     let i = r.parentNode.parentNode.rowIndex;
     let arr = [];
-    let str = "";
-    let str_arr = [];
     let data = {};
     //console.log(document.getElementById("db_table").rows[i].cells.length);
     //console.log(document.getElementById("db_table").rows[i].cells[0]);
@@ -121,10 +119,13 @@ function modify(r){
         if(prom == null || prom == "") alert("Nothing");
         if(prom == false) break;
         arr.push(prom);
-        str += "X";
-        str_arr.push(str);
     }
-    
+    data = JSON.stringify(arr);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/mod_call");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(data);
 }
 
 
