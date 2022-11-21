@@ -208,3 +208,16 @@ app.post('/query_story', urlencodedParser,function (req, res){
 });
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
+
+/*
+Fejlesztők Story Point-ja::
+select fejleszto.name, SUM(javitasok.storyPoint) from fejleszto, korabbi_javitasok, javitasok where fejleszto.email = korabbi_javitasok.fejleszto_email AND javitasok.id = korabbi_javitasok.id GROUP BY fejleszto.name;
+
+X fejleszto, milyen bugon milyen joggal van:
+SELECT javitasok.id, fejleszto.name, admin, sudoer, editor FROM javitasok, fejleszto, jogosultsag, korabbi_javitasok WHERE javitasok.id = korabbi_javitasok.id AND fejleszto.email = korabbi_javitasok.fejleszto_email AND fejleszto.pos = jogosultsag.pos GROUP BY javitasok.id ORDER BY fejleszto.name;
+
+
+
+
+
+*/ 
