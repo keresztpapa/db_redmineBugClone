@@ -150,6 +150,17 @@ function query_story(){
         throw new Error('Request failed');
     }).then((data) => {
         console.log(data);
+        let table = document.getElementById("db_table");
+            let row = table.insertRow(); 
+            for(let i = 0; i< data.length;i++){
+
+                for (var key in data[i]){
+                    let cell = row.insertCell();
+                    cell.innerHTML = data[i][key];
+                }                
+
+                row = table.insertRow();
+            }
     }).catch((error) => {
         console.log(error);
     });

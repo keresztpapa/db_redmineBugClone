@@ -177,7 +177,6 @@ app.post('/mod_call', urlencodedParser,function (req, res){
 
 
 app.post('/query_story', urlencodedParser,function (req, res){
-    console.log("Story points:");
     global.arr1 = ["",""];
     let strIndex = 0;
     const str = new String(JSON.stringify(req.body));
@@ -192,14 +191,11 @@ app.post('/query_story', urlencodedParser,function (req, res){
         }
     }
 
-    console.log(global.arr1[1]);
-
     app.post('/query_story_points', urlencodedParser,function (req, res){
-
-        let sql = `SELECT * FROM fejleszto WHERE name = '${global.arr1[1]}';`;
-        
+        let sql = `SELECT fejleszto.name, SUM(javitasok.storyPoint) AS gyujtott_pontok FROM fejleszto, korabbi_javitasok, javitasok WHERE fejleszto.name = '${global.arr1[1]}' AND fejleszto.email = korabbi_javitasok.fejleszto_email AND javitasok.id = korabbi_javitasok.id GROUP BY fejleszto.name;`;    
         con.query(sql, (error, result) => {
             if (error) throw error;
+            console.log(JSON.stringify(result));
             res.send(JSON.stringify(result));
             res.end();
         });
@@ -215,9 +211,5 @@ select fejleszto.name, SUM(javitasok.storyPoint) from fejleszto, korabbi_javitas
 
 X fejleszto, milyen bugon milyen joggal van:
 SELECT javitasok.id, fejleszto.name, admin, sudoer, editor FROM javitasok, fejleszto, jogosultsag, korabbi_javitasok WHERE javitasok.id = korabbi_javitasok.id AND fejleszto.email = korabbi_javitasok.fejleszto_email AND fejleszto.pos = jogosultsag.pos GROUP BY javitasok.id ORDER BY fejleszto.name;
-
-
-
-
 
 */ 
