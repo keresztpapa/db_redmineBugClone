@@ -94,10 +94,10 @@ db.execute("create table if not exists jogosultsag(pos varchar(255), admin tinyi
 
 #DB Mock data insertion
 #fejleszto_
-for i in range(100):
+for i in range(10):
   addDev()
     
-for i in range(100):
+for i in range(1000):
   addkorabbi_javitasok()
 
 addjavitasok()
