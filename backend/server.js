@@ -192,7 +192,7 @@ app.post('/query_story', urlencodedParser,function (req, res){
     }
 
     app.post('/query_story_points', urlencodedParser,function (req, res){
-        let sql = `SELECT fejleszto.name, SUM(javitasok.storyPoint) AS gyujtott_pontok FROM fejleszto, korabbi_javitasok, javitasok WHERE fejleszto.name = '${global.arr1[1]}' AND fejleszto.email = korabbi_javitasok.fejleszto_email AND javitasok.id = korabbi_javitasok.id GROUP BY fejleszto.name;`;    
+        let sql = `SELECT fejleszto.name, SUM(javitasok.storyPoint) AS gyujtott_pontok, COUNT(javitasok.storyPoint) as issue_darab_szama FROM fejleszto, korabbi_javitasok, javitasok WHERE fejleszto.name = '${global.arr1[1]}' AND fejleszto.email = korabbi_javitasok.fejleszto_email AND javitasok.id = korabbi_javitasok.id GROUP BY fejleszto.name;`;    
         con.query(sql, (error, result) => {
             if (error) throw error;
             console.log(JSON.stringify(result));

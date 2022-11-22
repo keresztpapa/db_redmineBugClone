@@ -136,22 +136,28 @@ function delete_cell(r){
 
 function query_story(){
 
-    let select = document.querySelector('#developers_load');
-    let xhr = new XMLHttpRequest();
+    var select = document.querySelector('#developers_load');
+    var xhr = new XMLHttpRequest();
     xhr.open("POST", '/query_story', true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.send(JSON.stringify({ "table": select.value }));    
-    let table = document.getElementById("db_table");
+    var table = document.getElementById("db_table");
     table.innerHTML = "";
-
     
     fetch('/query_story_points', {method: 'POST'}).then((res) =>{
         if(res.ok) return res.json();
         throw new Error('Request failed');
     }).then((data) => {
+        let row = table.insertRow();        
+        let cell_name = row.insertCell();
+        cell_name.innerHTML = "Név:";
+        let cell_SP = row.insertCell();
+        cell_SP.innerHTML = "Gyüjtött pont:";
+        let cell_ISSUE_COUNT = row.insertCell();
+        cell_ISSUE_COUNT.innerHTML = "Elvégzett issue-k";
+        row = table.insertRow();
+
         console.log(data);
-        let table = document.getElementById("db_table");
-            let row = table.insertRow(); 
             for(let i = 0; i< data.length;i++){
 
                 for (var key in data[i]){
@@ -161,6 +167,17 @@ function query_story(){
 
                 row = table.insertRow();
             }
+
+            if(data.length == 0){
+                let cell_1 = row.insertCell();
+                cell_1.innerHTML = select.value;
+                let cell_2 = row.insertCell();
+                cell_2.innerHTML = 0;
+                let cell_3 = row.insertCell();
+                cell_3.innerHTML = 0;
+                row = table.insertRow();
+            }
+
     }).catch((error) => {
         console.log(error);
     });

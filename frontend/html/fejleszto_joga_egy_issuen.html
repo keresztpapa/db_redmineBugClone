@@ -6,30 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redmine Clone</title>
     <link rel="stylesheet" href="markup.css">
+    <script src="client.js"></script>
 </head>
 
-<body>
-<p id="cim">Redmine Clone</p>
+<body onload="load_devs()">
 
 <ul>
     <li><a href="index.html">Index</a></li>
     <li><a href="registerPage.html">Adat Bevitel</a></li>
     <li><a href="report.html">Hiba bejelentes</a></li>
     <li><a href="database.html">Adatbázis</a></li>
-    <li><a href="dev_work_load_query.html">Fejlesztő munka mennyisége</a></li>
+    <li><a href="query.html">Fejlesztő munka mennyisége</a></li>
     <li><a href="fejleszto_joga_egy_issuen.html">Fejlesztő jogosultsaga egy issue-n</a></li>
 </ul>
 
 <div class="wrapper fadeInDown">
     <div id="formContent">
-      <h2 class="active"> Hiba bejelentes </h2>
-      <form action = "/add_report" method = "POST">
+      <h2 class="active"> Egy fejlesztő, melyik issue-kkal,<br> mennyi stroypoint-ot gyütött össze:</h2>
 
-        <input type="submit" class="fadeIn fourth" value="Submit">
-      </form>
-    </div>
-  </div>
+      <form>
+        <select id="developers_load" name="developers_load" placeholder="Developers">
+            <option value=""></option>
+        </select>
+    </form>
+    <input type="button" class="fadeIn fourth" value="Submit" onclick="query_story();">
+    <table id="db_table">
+        <tr>
+        </tr>
+    </table>
+</div>
+</div>
 
-<script src="client.js"></script>
 </body>
 </html>
