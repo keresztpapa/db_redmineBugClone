@@ -135,7 +135,6 @@ function delete_cell(r){
 }
 
 function query_story(){
-
     var select = document.querySelector('#developers_load');
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/query_story', true);
@@ -181,8 +180,60 @@ function query_story(){
     }).catch((error) => {
         console.log(error);
     });
-    
 }
+
+function query_issue_role(){
+    var select = document.querySelector('#developers_load');
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/query_role', true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(JSON.stringify({ "table": select.value }));    
+    var table = document.getElementById("db_table");
+    table.innerHTML = "";
+    
+    fetch('/query_role_issue', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        let row = table.insertRow();        
+        let cell_code = row.insertCell();
+        cell_code.innerHTML = "Issue kódja:";
+        let cell_admin = row.insertCell();
+        cell_admin.innerHTML = "ADMIN:";
+        let cell_sudoer = row.insertCell();
+        cell_sudoer.innerHTML = "SUDOER:";
+        let cell_editor = row.insertCell();
+        cell_editor.innerHTML = "EDITOR:";
+        row = table.insertRow();
+
+        console.log(data);
+            for(let i = 0; i< data.length;i++){
+
+                for (var key in data[i]){
+                    let cell = row.insertCell();
+                    cell.innerHTML = data[i][key];
+                }                
+
+                row = table.insertRow();
+            }
+
+            if(data.length == 0){
+                let cell_1 = row.insertCell();
+                cell_1.innerHTML = " No issue solved "
+                let cell_2 = row.insertCell();
+                cell_2.innerHTML = 0;
+                let cell_3 = row.insertCell();
+                cell_3.innerHTML = 0;
+                let cell_4 = row.insertCell();
+                cell_4.innerHTML = 0;
+                row = table.insertRow();
+            }
+
+    }).catch((error) => {
+        console.log(error);
+    });
+}
+
 
 /*
 const db_bttn = document.getElementById('db_button');

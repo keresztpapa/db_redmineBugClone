@@ -203,6 +203,33 @@ app.post('/query_story', urlencodedParser,function (req, res){
 
 });
 
+app.post('/query_role', urlencodedParser,function (req, res){
+    global.arr1 = ["",""];
+    let strIndex = 0;
+    const str = new String(JSON.stringify(req.body));
+    
+    for(i=0;i<str.length;i++){
+        if(str.charAt(i).match(/[a-zA-Z_: ]/i)){
+            if(str[i] == ":"){
+                strIndex++;
+            }else{            
+                global.arr1[strIndex] += str.charAt(i);
+            }    
+        }
+    }
+
+    app.post('/query_role_issue', urlencodedParser,function (req, res){
+        let sql = `SELECT javitasok.id, admin, sudoer, editor FROM javitasok, fejleszto, jogosultsag, korabbi_javitasok WHERE fejleszto.name = '${global.arr1[1]}' AND javitasok.id = korabbi_javitasok.id AND fejleszto.email = korabbi_javitasok.fejleszto_email AND fejleszto.pos = jogosultsag.pos GROUP BY javitasok.id ORDER BY fejleszto.name;`;         
+            con.query(sql, (error, result) => {
+            if (error) throw error;
+            console.log(JSON.stringify(result));
+            res.send(JSON.stringify(result));
+            res.end();
+        });
+    });    
+
+});
+
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
 
 /*
