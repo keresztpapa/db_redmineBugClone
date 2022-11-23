@@ -51,7 +51,8 @@ function load_db(){
         console.log(error);
     });
 };
-var table_names = [""];
+
+var table_name = "";
 
 function send_table_content(){
     let select = document.querySelector('#database_load');
@@ -59,6 +60,7 @@ function send_table_content(){
     xhr.open("POST", '/load_table_content', true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.send(JSON.stringify({ "table": select.value }));    
+    table_name = select.value;
     let table = document.getElementById("db_table");
     table.innerHTML = "";
 
@@ -109,18 +111,21 @@ function send_table_content(){
 
 function modify(r){
     let i = r.parentNode.parentNode.rowIndex;
-    let arr = [];
+    let arr = [{}];
+    let original_arr = [{}];
     let data = {};
     //console.log(document.getElementById("db_table").rows[i].cells.length);
     //console.log(document.getElementById("db_table").rows[i].cells[0]);
 
     for(let j=0;j < document.getElementById("db_table").rows[i].cells.length-2; j++){
+        original_arr.push({data:document.getElementById("db_table").rows[i].cells[j].innerHTML});
         let prom = prompt(document.getElementById("db_table").rows[0].cells[j]+` modositasa:`, document.getElementById("db_table").rows[i].cells[j].innerHTML);
         if(prom == null || prom == "") alert("Nothing");
         if(prom == false) break;
-        arr.push(prom);
+        arr.push({data:prom});
     }
-    data = JSON.stringify(arr);
+    
+    data = JSON.stringify({table_name:table_name, arr, original_arr});
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/mod_call");

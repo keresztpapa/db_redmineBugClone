@@ -147,24 +147,93 @@ app.post('/load_table_content', urlencodedParser, function (req, res) {
 
 app.post('/mod_call', urlencodedParser,function (req, res){
     let response = req.body;
-    let arr = ["","","",""];
+    let arr = ["","","","","","","","","","","","","","","","","","","","",""];
     let strIndex = 0;
-    let newArr = ["","","","","","",""];
+    var original_data = [];
     const str = new String(JSON.stringify(response));
-    console.log(str);
-    
     for(i=0;i<str.length;i++){
-        if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "dele" || i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2) == "mod"){
+        //if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3)+str.charAt(i+4) == `data`){
+        if(i>3 && str.charAt(i) == ":" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2) == "arr" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "data"
+            || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "orig"){
             strIndex++;
         }
-        if(str.charAt(i).match(/[a-zA-Z_:0-9.@ -]/i)){
+        if(str.charAt(i).match(/[a-zA-Z_0-9.@ -]/i)){
+            arr[strIndex] += str.charAt(i);
+        }
+    }
+    //console.log(str);
+    var opt_arr = [];
+    for(i=0;i<arr.length;i++){
+        if(arr[i] != 'arr' && arr[i] != 'data' && arr[i] != '' && arr[i] != 'original_arr') opt_arr.push(arr[i]);
+    }
+    res.end();
+    var actual_table_names = [];
+    var sql = `UPDATE ${arr[1]} SET`;
+
+    //console.log(opt_arr);
+
+    con.query(`DESCRIBE ${opt_arr[1]};`, (error, result) => {
+        if (error) throw error;
+        for(i=0;i<result.length;i++){
+            actual_table_names.push(result[i].Field);
+        }
+        
+        for(i=0;i<actual_table_names.length;i++){
+            sql += ` ${actual_table_names[i]} = '${opt_arr[i+2]}'`;
+            if(i < actual_table_names.length-1) sql += " AND ";
+        }
+
+        var original_arr = [];
+        for(i=0;i<opt_arr.length;i++){
+            if(opt_arr[i] == "original_"){
+                for(j=i;j<opt_arr.length;j++){
+                    original_arr.push(opt_arr[j]);
+                }
+            }
+        }
+
+        sql += " WHERE ";
+
+        for(i=0;i<actual_table_names.length;i++){
+            sql += ` ${actual_table_names[i]} = '${original_arr[i+1]}'`;
+            if(i < actual_table_names.length-1) sql += " AND ";
+        }
+
+        sql += ";";
+//        console.log(sql);
+
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("UPDATED");
+        });
+
+    });
+});  
+
+app.post('/del_call', urlencodedParser,function (req, res){
+    let response = req.body;
+    let arr = ["","","","","","","","","","","","","","","",];
+    let strIndex = 0;
+    const str = new String(JSON.stringify(response));
+    for(i=0;i<str.length;i++){
+        //if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3)+str.charAt(i+4) == `data`){
+        if(i>3 && str.charAt(i) == ":" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2) == "arr" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "data"){
+            strIndex++;
+        }
+        if(str.charAt(i).match(/[a-zA-Z_0-9.@ -]/i)){
             arr[strIndex] += str.charAt(i);
         }
     }
 
     console.log(arr);
-  
+
+    var opt_arr = [];
+    for(i=0;i<arr.length;i++){
+        if(arr[i] != 'arr' && arr[i] != 'data' && arr[i] != '') opt_arr.push(arr[i]);
+    }
+    console.log(opt_arr);
     res.end();
+
 /*
     con.query(`UPDATE user SET name = '${newArr[3]}', email = '${newArr[5]}', birth = '${newArr[4]}' WHERE name = '${newArr[0]}' AND email = '${newArr[2]}'`, function (err, result) {
         if (err) throw err;
@@ -174,7 +243,6 @@ app.post('/mod_call', urlencodedParser,function (req, res){
     });
 */
 });  
-
 
 app.post('/query_story', urlencodedParser,function (req, res){
     global.arr1 = ["",""];
@@ -239,4 +307,4 @@ select fejleszto.name, SUM(javitasok.storyPoint) from fejleszto, korabbi_javitas
 X fejleszto, milyen bugon milyen joggal van:
 SELECT javitasok.id, fejleszto.name, admin, sudoer, editor FROM javitasok, fejleszto, jogosultsag, korabbi_javitasok WHERE javitasok.id = korabbi_javitasok.id AND fejleszto.email = korabbi_javitasok.fejleszto_email AND fejleszto.pos = jogosultsag.pos GROUP BY javitasok.id ORDER BY fejleszto.name;
 
-*/ 
+*/  
