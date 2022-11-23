@@ -149,7 +149,6 @@ app.post('/mod_call', urlencodedParser,function (req, res){
     let response = req.body;
     let arr = ["","","","","","","","","","","","","","","","","","","","",""];
     let strIndex = 0;
-    var original_data = [];
     const str = new String(JSON.stringify(response));
     for(i=0;i<str.length;i++){
         //if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3)+str.charAt(i+4) == `data`){
@@ -210,7 +209,56 @@ app.post('/mod_call', urlencodedParser,function (req, res){
 });  
 
 app.post('/del_call', urlencodedParser,function (req, res){
+    let response = req.body;
+    let arr = ["","","","","","","","","","","","","","","","","","","","",""];
+    let strIndex = 0;
+    const str = new String(JSON.stringify(response));
+    for(i=0;i<str.length;i++){
+        //if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3)+str.charAt(i+4) == `data`){
+        if(i>3 && str.charAt(i) == ":" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2) == "arr" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "data"
+            || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "orig"){
+            strIndex++;
+        }
+        if(str.charAt(i).match(/[a-zA-Z_0-9.@ -]/i)){
+            arr[strIndex] += str.charAt(i);
+        }
+    }
+    var opt_arr = [];
+    for(i=0;i<arr.length;i++){
+        if(arr[i] != 'arr' && arr[i] != 'data' && arr[i] != '' && arr[i] != 'original_arr') opt_arr.push(arr[i]);
+    }
+    res.end();
+    var actual_table_names = [];
+    var sql = `DELETE FROM ${arr[1]} WHERE`;
 
+    con.query(`DESCRIBE ${opt_arr[1]};`, (error, result) => {
+        if (error) throw error;
+        for(i=0;i<result.length;i++){
+            actual_table_names.push(result[i].Field);
+        }
+
+        var original_arr = [];
+        for(i=0;i<opt_arr.length;i++){
+            if(opt_arr[i] == "original_"){
+                for(j=i;j<opt_arr.length;j++){
+                    original_arr.push(opt_arr[j]);
+                }
+            }
+        }
+        
+        for(i=0;i<actual_table_names.length;i++){
+            sql += ` ${actual_table_names[i]} = '${original_arr[i+1]}'`;
+            if(i < actual_table_names.length-1) sql += " AND ";
+        }
+
+        sql += ";";
+        console.log(sql);
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("DELETED");
+        });
+
+    });
 });  
 
 app.post('/query_story', urlencodedParser,function (req, res){
