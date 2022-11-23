@@ -180,7 +180,7 @@ app.post('/mod_call', urlencodedParser,function (req, res){
         
         for(i=0;i<actual_table_names.length;i++){
             sql += ` ${actual_table_names[i]} = '${opt_arr[i+2]}'`;
-            if(i < actual_table_names.length-1) sql += " AND ";
+            if(i < actual_table_names.length-1) sql += ", ";
         }
 
         var original_arr = [];
@@ -200,7 +200,6 @@ app.post('/mod_call', urlencodedParser,function (req, res){
         }
 
         sql += ";";
-//        console.log(sql);
 
         con.query(sql, function (err, result) {
             if (err) throw err;
@@ -211,37 +210,7 @@ app.post('/mod_call', urlencodedParser,function (req, res){
 });  
 
 app.post('/del_call', urlencodedParser,function (req, res){
-    let response = req.body;
-    let arr = ["","","","","","","","","","","","","","","",];
-    let strIndex = 0;
-    const str = new String(JSON.stringify(response));
-    for(i=0;i<str.length;i++){
-        //if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3)+str.charAt(i+4) == `data`){
-        if(i>3 && str.charAt(i) == ":" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2) == "arr" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "data"){
-            strIndex++;
-        }
-        if(str.charAt(i).match(/[a-zA-Z_0-9.@ -]/i)){
-            arr[strIndex] += str.charAt(i);
-        }
-    }
 
-    console.log(arr);
-
-    var opt_arr = [];
-    for(i=0;i<arr.length;i++){
-        if(arr[i] != 'arr' && arr[i] != 'data' && arr[i] != '') opt_arr.push(arr[i]);
-    }
-    console.log(opt_arr);
-    res.end();
-
-/*
-    con.query(`UPDATE user SET name = '${newArr[3]}', email = '${newArr[5]}', birth = '${newArr[4]}' WHERE name = '${newArr[0]}' AND email = '${newArr[2]}'`, function (err, result) {
-        if (err) throw err;
-        console.log("UPDATED");
-        console.log(JSON.stringify(result));
-        res.end();
-    });
-*/
 });  
 
 app.post('/query_story', urlencodedParser,function (req, res){
