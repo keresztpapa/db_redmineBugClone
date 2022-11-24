@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redmine Clone</title>
     <link rel="stylesheet" href="markup.css">
-    <script src="client.js"></script>
 </head>
 
-<body onload="load_devs()">
+<body>
+<p id="cim">Redmine Clone</p>
 
 <ul>
     <li><a href="index.html">Index</a></li>
@@ -19,26 +19,28 @@
     <li><a href="javitasok.html">Javitasok bevitele</a></li>
     <li><a href="javitasok_fejlesztoknek.html">Javitasok hozzarendelese fejlesztokhoz</a></li>
     <li><a href="database.html">Adatbázis</a></li>
-    <li><a href="query.html">Fejlesztő munka mennyisége</a></li>
+    <li><a href="dev_work_load_query.html">Fejlesztő munka mennyisége</a></li>
     <li><a href="fejleszto_joga_egy_issuen.html">Fejlesztő jogosultsaga egy issue-n</a></li>
 </ul>
 
 <div class="wrapper fadeInDown">
-    <div id="formContent">
-      <h2 class="active"> Egy fejlesztő, melyik issue-kkal,<br> mennyi stroypoint-ot gyütött össze:</h2>
+  <div id="formContent">
+    <h2 class="active"> Hiba bejelentes </h2>
+    <form action = "/add_permission" method = "POST">
+      
+      <input type="text" id="pos" class="fadeIn second" name = "pos" placeholder="Position"><br>
+      Admin
+      <input type="checkbox" id="admin" name="admin" value="Admin">
+      Sudoer
+      <input type="checkbox" id="sudoer" name="sudoer" value="Sudoer"> 
+      Editor
+      <input type="checkbox" id="editor" name="editor" value="Editor">
 
-      <form>
-        <select id="developers_load" name="developers_load" placeholder="Developers">
-            <option value=""></option>
-        </select>
-    </form>
-    <input type="button" class="fadeIn fourth" value="Submit" onclick="query_story();">
-    <table id="db_table">
-        <tr>
-        </tr>
-    </table>
+      <input type="submit" class="fadeIn fourth" value="Submit">
+  </form>
 </div>
 </div>
 
+<script src="client.js"></script>
 </body>
 </html>

@@ -70,10 +70,8 @@ faker = Faker()
 
 connection = mysql.connector.connect(
   host= 'localhost',
-#  user= 'root',
-#  password= 'admin',
-  user = 'admin',
-  password = 'root',
+  user= 'root',
+  password = 'admin',
   database= 'bugzilla'
 )
 
@@ -90,7 +88,7 @@ db.execute("DROP TABLE IF EXISTS jogosultsag;")
 #DB Tables creation
 db.execute("create table if not exists fejleszto( name varchar(255) not null, email varchar(255), pos varchar(255), primary key(email));")
 db.execute("create table if not exists korabbi_javitasok( fejleszto_email varchar(255) not null, id varchar(255), primary key(id));")
-db.execute("create table if not exists javitasok( id varchar(255) not null, storyPoint tinyint(5) not null, descript varchar(255), datum varchar(255), primary key(id));")
+db.execute("create table if not exists javitasok( id varchar(255) not null, storyPoint tinyint(5) not null, descript varchar(255), primary key(id));")
 db.execute("create table if not exists hibaBejelentes( cim varchar(255), ticketSorszam int not null auto_increment, prioritas tinyint(10), primary key(ticketSorszam));")
 db.execute("create table if not exists jogosultsag(pos varchar(255), admin tinyint(1), sudoer tinyint(1), editor tinyint(1), primary key(pos));")
 

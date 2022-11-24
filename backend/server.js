@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var path = require('path');
 var mysql = require('mysql');
+const { application } = require('express');
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use(express.static(path.join(__dirname, '../frontend/html')));
 
@@ -15,21 +16,23 @@ const index = resolve('../frontend/html/index.html');
 const register = resolve('../frontend/html/registerPage.html');
 const report = resolve('../frontend/html/report.html');
 const database = resolve('../frontend/html/database.html');
-
+const jogos = resolve('../frontend/html/jogos.html');
+const javitasok = resolve('../frontend/html/javitasok.html');
+const javitasok_fejleszt = resolve('../frontend/html/javitasok_fejlesztoknek.html');
 
 app.get('/', (req, res) => res.sendFile(index));
 app.get('/index', (req, res) => res.sendFile(index));
 app.get('/register', (req, res) => res.sendFile(register));
 app.get('/report', (req, res) => res.sendFile(report));
 app.get('/database', (req, res) => res.sendFile(database));
-
+app.get('/jogos', (req, res) => res.sendFile(jogos))
+app.get('/javitasok', (req, res) => res.sendFile(javitasok))
+app.get('/javitasok_fejlesztoknek', (req, res) => res.sendFile(javitasok_fejleszt))
 
 var con = mysql.createConnection({
     host: 'localhost',
-    //user: 'root',
-    //password: 'admin',
-    user: 'admin',
-    password: 'root',
+    user: 'root',
+    password: 'admin',
     database: 'bugzilla'
 });
 
@@ -45,6 +48,55 @@ cron.schedule('59 23 * * *', function(){
     });
 });
 
+app.post('/give_issue_to_dev', urlencodedParser, function (req, res) {
+    var dev_name = req.body.developers_load;
+    var issue_id = req.body.issue_load;
+
+    con.query(`SELECT email FROM fejleszto WHERE name = '${dev_name}';`, function (err, result) {
+        if (err) throw err;
+
+        /*
+        let sql = `INSERT INTO korabbi_javitasok (fejleszto_email, id) VALUE('${result[0].email}', '${issue_id}');`
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("record inserted");
+        });
+        */
+    });
+});
+
+app.post('/add_permission', urlencodedParser, function (req, res) {
+    let sql = `INSERT INTO hibaBejelentes (id, storyPoint, descript) VALUE('${req.body.code}', '${req.body.story}', '${req.body.leir}');`
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("record inserted");
+    });
+});
+
+app.post('/add_permission', urlencodedParser, function (req, res) {
+    var sudoer = 0;
+    var editor = 0;
+    var admin = 0;
+
+    if(req.body.admin) admin = 1;
+    if(req.body.sudoer) sudoer = 1;
+    if(req.body.editor) editor = 1;
+
+    let sql = `INSERT INTO hibaBejelentes (pos,  admin, sudoer, editor) VALUE('${req.body.pos}', '${req.body.admin}', '${req.body.sudoer}', '${req.body.editor}');`
+    
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("record inserted");
+    });
+});
+
+app.post('/add_report', urlencodedParser, function (req, res) {
+    let sql = `INSERT INTO hibaBejelentes (cim, prioritas) VALUE('${req.body.cim}', '${req.body.prior}');`
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("record inserted");
+    });
+});
 
 app.post('/add_user', urlencodedParser, function (req, res) {
     response = {
@@ -57,12 +109,20 @@ app.post('/add_user', urlencodedParser, function (req, res) {
         if (err) throw err;
         console.log("record inserted");
     });
-    console.log(response);
-    res.end(JSON.stringify(response));
 });
 
 app.post('/list_devs', urlencodedParser, function (req, res) {
     con.query(`SELECT name FROM fejleszto;`, function (err, result) {
+        if (err) throw err;
+        console.log(JSON.stringify(result));
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+    console.log("FETCH DONE");
+});
+
+app.post('/list_issue', urlencodedParser, function (req, res) {
+    con.query(`SELECT id FROM korabbi_javitasok;`, function (err, result) {
         if (err) throw err;
         console.log(JSON.stringify(result));
         res.send(JSON.stringify(result));

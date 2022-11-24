@@ -18,6 +18,40 @@ function load_devs(){
     });
 };
 
+function load_devs_and_issues(){
+    fetch('/list_devs', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        let select = document.getElementById("developers_load");
+        
+        for(let i = 0; i< data.length;i++){
+            let opt = document.createElement('option');
+            opt.value = `${data[i].name}`;
+            opt.innerHTML = `${data[i].name}`;
+            select.appendChild(opt);
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+
+    fetch('/list_issue', {method: 'POST'}).then((res) =>{
+        if(res.ok) return res.json();
+        throw new Error('Request failed');
+    }).then((data) => {
+        let select = document.getElementById("issue_load");
+        
+        for(let i = 0; i< data.length;i++){
+            let opt = document.createElement('option');
+            opt.value = `${data[i].id}`;
+            opt.innerHTML = `${data[i].id}`;
+            select.appendChild(opt);
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
 function send_dev_name(){
     let select = document.querySelector('#developers_load');
     let xhr = new XMLHttpRequest();
