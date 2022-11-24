@@ -70,8 +70,10 @@ faker = Faker()
 
 connection = mysql.connector.connect(
   host= 'localhost',
-  user= 'root',
-  password= 'admin',
+#  user= 'root',
+#  password= 'admin',
+  user = 'admin',
+  password = 'root',
   database= 'bugzilla'
 )
 

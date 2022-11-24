@@ -26,8 +26,10 @@ app.get('/database', (req, res) => res.sendFile(database));
 
 var con = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: 'admin',
+    //user: 'root',
+    //password: 'admin',
+    user: 'admin',
+    password: 'root',
     database: 'bugzilla'
 });
 
