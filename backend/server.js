@@ -55,21 +55,12 @@ app.post('/give_issue_to_dev', urlencodedParser, function (req, res) {
     con.query(`SELECT email FROM fejleszto WHERE name = '${dev_name}';`, function (err, result) {
         if (err) throw err;
 
-        /*
-        let sql = `INSERT INTO korabbi_javitasok (fejleszto_email, id) VALUE('${result[0].email}', '${issue_id}');`
+        let sql = `UPDATE korabbi_javitasok SET fejleszto_email = '${result[0].email}' WHERE id = '${issue_id}';`
         con.query(sql, function (err, result) {
             if (err) throw err;
             console.log("record inserted");
         });
-        */
-    });
-});
-
-app.post('/add_permission', urlencodedParser, function (req, res) {
-    let sql = `INSERT INTO hibaBejelentes (id, storyPoint, descript) VALUE('${req.body.code}', '${req.body.story}', '${req.body.leir}');`
-    con.query(sql, function (err, result) {
-        if (err) throw err;
-        console.log("record inserted");
+        
     });
 });
 
@@ -82,7 +73,7 @@ app.post('/add_permission', urlencodedParser, function (req, res) {
     if(req.body.sudoer) sudoer = 1;
     if(req.body.editor) editor = 1;
 
-    let sql = `INSERT INTO hibaBejelentes (pos,  admin, sudoer, editor) VALUE('${req.body.pos}', '${req.body.admin}', '${req.body.sudoer}', '${req.body.editor}');`
+    let sql = `INSERT INTO jogosultsag (pos,  admin, sudoer, editor) VALUE('${req.body.pos}', '${admin}', '${sudoer}', '${editor}');`
     
     con.query(sql, function (err, result) {
         if (err) throw err;
@@ -104,7 +95,7 @@ app.post('/add_user', urlencodedParser, function (req, res) {
        last_name:req.body.last_name,
        pos:req.body.position
     };
-    let sql = `INSERT INTO user (name, pos) VALUE('${req.body.first_name} ${req.body.last_name}', '${req.body.position}');`
+    let sql = `INSERT INTO fejleszto (name, email, pos) VALUE('${req.body.first_name} ${req.body.last_name}', '${req.body.first_name}_${req.body.last_name}@gmail.com', '${req.body.position}');`
     con.query(sql, function (err, result) {
         if (err) throw err;
         console.log("record inserted");
