@@ -19,16 +19,16 @@ const database = resolve('../frontend/html/database.html');
 const jogos = resolve('../frontend/html/jogos.html');
 const javitasok = resolve('../frontend/html/javitasok.html');
 const javitasok_fejleszt = resolve('../frontend/html/javitasok_fejlesztoknek.html');
-
+const from_report_to_dev = resolve('../frontend/html/report_to_dev.html');
 app.get('/', (req, res) => res.sendFile(index));
 app.get('/index', (req, res) => res.sendFile(index));
 app.get('/register', (req, res) => res.sendFile(register));
 app.get('/report', (req, res) => res.sendFile(report));
 app.get('/database', (req, res) => res.sendFile(database));
-app.get('/jogos', (req, res) => res.sendFile(jogos))
-app.get('/javitasok', (req, res) => res.sendFile(javitasok))
-app.get('/javitasok_fejlesztoknek', (req, res) => res.sendFile(javitasok_fejleszt))
-
+app.get('/jogos', (req, res) => res.sendFile(jogos));
+app.get('/javitasok', (req, res) => res.sendFile(javitasok));
+app.get('/javitasok_fejlesztoknek', (req, res) => res.sendFile(javitasok_fejleszt));
+app.get('/report_to_dev', (req, res) => res.sendFile(from_report_to_dev));
 var con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -62,6 +62,35 @@ app.post('/give_issue_to_dev', urlencodedParser, function (req, res) {
         });
         
     });
+});
+
+app.post('/devs_working_on_reports', urlencodedParser, function (req, res) {
+    var arr = ["", ""];
+    let strIndex = 0;
+    const str = new String(JSON.stringify(req.body));
+    console.log(str);
+
+    for(i=0;i<str.length;i++){
+        if(str.charAt(i).match(/[a-zA-Z: ]/i)){
+            if(str[i] == ":"){
+                strIndex++;
+            }else{            
+                arr[strIndex] += str.charAt(i);
+            }    
+        }
+    }
+    console.log(arr[1]);
+    //var sql = `SELECT fejleszto.name, sub.cim FROM fejleszto, (SELECT cim, fejleszto_email as email FROM hibaBejelentes, korabbi_javitasok WHERE ticketSorszam = id) as sub WHERE sub.email = fejleszto.email AND fejleszto.name = '${arr[1]}' GROUP BY sub.cim;`;
+    var sql = `SELECT fejleszto.name, sub.cim FROM fejleszto, (SELECT cim, fejleszto_email as email FROM hibaBejelentes, korabbi_javitasok WHERE ticketSorszam = id) as sub WHERE sub.email = fejleszto.email AND fejleszto.name = '${arr[1]}';`;
+    console.log(sql);
+    app.post('/devs_working_on_reports_query', urlencodedParser,function (req, res){
+        con.query(sql, (error, result) => {
+            if (error) throw error;
+            console.log(JSON.stringify(result));
+            res.send(JSON.stringify(result));
+            res.end();
+        });
+    });    
 });
 
 app.post('/add_permission', urlencodedParser, function (req, res) {

@@ -29,26 +29,23 @@ def addkorabbi_javitasok():
   sql_fejleszto_Name_query = "SELECT email FROM fejleszto"
   db.execute(sql_fejleszto_Name_query)
   devs = db.fetchall()
+
+  sql_jav_id = "SELECT id FROM javitasok"
+  db.execute(sql_jav_id)
+  id_j = db.fetchall()
+
   #random id for korabbi_javitasoks
-  random_string = ''.join(random.choice(string.ascii_uppercase) for i in range(10))
-  sql_randkorabbi_javitasok_query = f"SELECT id FROM korabbi_javitasok WHERE korabbi_javitasok.id = '{random_string}';"
-  sql_randkorabbi_javitasok = f"INSERT INTO korabbi_javitasok (fejleszto_email, id) value ('{devs[random.randint(0, len(devs)-1)][0]}', '{random_string}')"
-
-  db.execute(sql_randkorabbi_javitasok_query)
-  res = db.fetchall()
-  if len(res) == 0:
+  for i in range(len(id_j)):
+    sql_randkorabbi_javitasok = f"INSERT INTO korabbi_javitasok (fejleszto_email, id) value ('{devs[random.randint(0, len(devs)-1)][0]}', '{id_j[i][0]}')"
     db.execute(sql_randkorabbi_javitasok)
-  else:
-    print("recall")
-    addkorabbi_javitasok()
-
+  
 def addjavitasok():
   #fetching db to query korabbi_javitasok ids
-  sql_korabbi_javitasok_query = "SELECT id FROM korabbi_javitasok"
-  db.execute(sql_korabbi_javitasok_query)
+  sql_report_query = "SELECT ticketSorszam FROM hibaBejelentes"
+  db.execute(sql_report_query)
   res = db.fetchall()
   for i in range(len(res)):
-    sql_javitasok_Ins = f"INSERT INTO javitasok (id, storyPoint, descript ,datum) value ('{res[i][0]}', '{str(random.randint(0,5))}','{faker.paragraph(nb_sentences=1)}','{faker.date_time_between(start_date='-30y', end_date='now')}');" 
+    sql_javitasok_Ins = f"INSERT INTO javitasok (id, storyPoint, descript) value ('{res[i][0]}', '{str(random.randint(0,5))}','{faker.paragraph(nb_sentences=1)}');" 
     db.execute(sql_javitasok_Ins)
 
 def addHibaReport():
@@ -88,7 +85,7 @@ db.execute("DROP TABLE IF EXISTS jogosultsag;")
 #DB Tables creation
 db.execute("create table if not exists fejleszto( name varchar(255) not null, email varchar(255), pos varchar(255), primary key(email));")
 db.execute("create table if not exists korabbi_javitasok( fejleszto_email varchar(255) not null, id varchar(255), primary key(id));")
-db.execute("create table if not exists javitasok( id varchar(255) not null, storyPoint tinyint(5) not null, descript varchar(255), primary key(id));")
+db.execute("create table if not exists javitasok( id int not null, storyPoint tinyint(5) not null, descript varchar(255), primary key(id));")
 db.execute("create table if not exists hibaBejelentes( cim varchar(255), ticketSorszam int not null auto_increment, prioritas tinyint(10), primary key(ticketSorszam));")
 db.execute("create table if not exists jogosultsag(pos varchar(255), admin tinyint(1), sudoer tinyint(1), editor tinyint(1), primary key(pos));")
 
@@ -96,12 +93,12 @@ db.execute("create table if not exists jogosultsag(pos varchar(255), admin tinyi
 #fejleszto_
 for i in range(10):
   addDev()
-    
-for i in range(1000):
-  addkorabbi_javitasok()
 
-addjavitasok()
 addHibaReport()
+addjavitasok()  
+addkorabbi_javitasok()
+
+
 addJog()
 
 test("hibaBejelentes")

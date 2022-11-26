@@ -289,22 +289,32 @@ function query_issue_role(){
     });
 }
 
+function get_reports_from_devs_querry(){ 
+    let select = document.querySelector('#developers_load');
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/devs_working_on_reports", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(JSON.stringify({ "name": select.value }));
+    var table = document.getElementById("db_table");
+    table.innerHTML = "";
 
-/*
-const db_bttn = document.getElementById('db_button');
-
-db_bttn.addEventListener('click', async () => {
-    fetch('/clicked', {method: 'POST'}).then((res) =>{
+    fetch('/devs_working_on_reports_query', {method: 'POST'}).then((res) =>{
         if(res.ok) return res.json();
         throw new Error('Request failed');
     }).then((data) => {
-        document.getElementById('db_list').innerHTML = ` `;
-        for(let i = 0; i< data.length;i++){    
-            document.getElementById('db_list').innerHTML += `${data[i].name}`+"<br>";
+        let row = table.insertRow();        
+        console.log(data);
+        for(let i = 0; i< data.length;i++){
+
+            for (var key in data[i]){
+                let cell = row.insertCell();
+                cell.innerHTML = data[i][key];
+            }                
+
+            row = table.insertRow();
         }
-        document.getElementById('db_list').innerHTML += `\n`;
-    }).catch((error) => { 
-        console.log(error); 
+
+    }).catch((error) => {
+        console.log(error);
     });
-});
-*/
+}
