@@ -290,11 +290,11 @@ function query_issue_role(){
 }
 
 function get_reports_from_devs_querry(){ 
-    let select = document.querySelector('#developers_load');
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "/devs_working_on_reports", true);
+    var select = document.querySelector('#developers_load');
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/devs_working_on_reports', true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send(JSON.stringify({ "name": select.value }));
+    xhr.send(JSON.stringify({ "table": select.value }));    
     var table = document.getElementById("db_table");
     table.innerHTML = "";
 
@@ -303,16 +303,32 @@ function get_reports_from_devs_querry(){
         throw new Error('Request failed');
     }).then((data) => {
         let row = table.insertRow();        
+        let cell_code = row.insertCell();
+        cell_code.innerHTML = "Issue kódja:";
+        row = table.insertRow();
+
         console.log(data);
-        for(let i = 0; i< data.length;i++){
+            for(let i = 0; i< data.length;i++){
 
-            for (var key in data[i]){
-                let cell = row.insertCell();
-                cell.innerHTML = data[i][key];
-            }                
+                for (var key in data[i]){
+                    let cell = row.insertCell();
+                    cell.innerHTML = data[i][key];
+                }                
 
-            row = table.insertRow();
-        }
+                row = table.insertRow();
+            }
+
+            if(data.length == 0){
+                let cell_1 = row.insertCell();
+                cell_1.innerHTML = " No issue solved "
+                let cell_2 = row.insertCell();
+                cell_2.innerHTML = 0;
+                let cell_3 = row.insertCell();
+                cell_3.innerHTML = 0;
+                let cell_4 = row.insertCell();
+                cell_4.innerHTML = 0;
+                row = table.insertRow();
+            }
 
     }).catch((error) => {
         console.log(error);

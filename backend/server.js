@@ -64,34 +64,34 @@ app.post('/give_issue_to_dev', urlencodedParser, function (req, res) {
     });
 });
 
-app.post('/devs_working_on_reports', urlencodedParser, function (req, res) {
-    var arr = ["", ""];
+app.post('/devs_working_on_reports', urlencodedParser, function (req, res) {    
+    global.arr2 = ["",""];
     let strIndex = 0;
     const str = new String(JSON.stringify(req.body));
-    console.log(str);
-
+    
     for(i=0;i<str.length;i++){
-        if(str.charAt(i).match(/[a-zA-Z: ]/i)){
+        if(str.charAt(i).match(/[a-zA-Z_: ]/i)){
             if(str[i] == ":"){
                 strIndex++;
             }else{            
-                arr[strIndex] += str.charAt(i);
+                global.arr2[strIndex] += str.charAt(i);
             }    
         }
     }
-    console.log(arr[1]);
-    //var sql = `SELECT fejleszto.name, sub.cim FROM fejleszto, (SELECT cim, fejleszto_email as email FROM hibaBejelentes, korabbi_javitasok WHERE ticketSorszam = id) as sub WHERE sub.email = fejleszto.email AND fejleszto.name = '${arr[1]}' GROUP BY sub.cim;`;
-    var sql = `SELECT fejleszto.name, sub.cim FROM fejleszto, (SELECT cim, fejleszto_email as email FROM hibaBejelentes, korabbi_javitasok WHERE ticketSorszam = id) as sub WHERE sub.email = fejleszto.email AND fejleszto.name = '${arr[1]}';`;
-    console.log(sql);
+
     app.post('/devs_working_on_reports_query', urlencodedParser,function (req, res){
-        con.query(sql, (error, result) => {
+        let sql = `SELECT sub.cim FROM fejleszto, (SELECT cim, fejleszto_email as email FROM hibaBejelentes, korabbi_javitasok WHERE ticketSorszam = id) as sub WHERE sub.email = fejleszto.email AND fejleszto.name = '${global.arr2[1]}' GROUP BY sub.cim;`;         
+            con.query(sql, (error, result) => {
             if (error) throw error;
             console.log(JSON.stringify(result));
             res.send(JSON.stringify(result));
             res.end();
         });
     });    
+
+
 });
+
 
 app.post('/add_permission', urlencodedParser, function (req, res) {
     var sudoer = 0;
@@ -119,11 +119,6 @@ app.post('/add_report', urlencodedParser, function (req, res) {
 });
 
 app.post('/add_user', urlencodedParser, function (req, res) {
-    response = {
-       first_name:req.body.first_name,
-       last_name:req.body.last_name,
-       pos:req.body.position
-    };
     let sql = `INSERT INTO fejleszto (name, email, pos) VALUE('${req.body.first_name} ${req.body.last_name}', '${req.body.first_name}_${req.body.last_name}@gmail.com', '${req.body.position}');`
     con.query(sql, function (err, result) {
         if (err) throw err;
@@ -233,7 +228,6 @@ app.post('/mod_call', urlencodedParser,function (req, res){
     let strIndex = 0;
     const str = new String(JSON.stringify(response));
     for(i=0;i<str.length;i++){
-        //if(i>3 && str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3)+str.charAt(i+4) == `data`){
         if(i>3 && str.charAt(i) == ":" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2) == "arr" || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "data"
             || str.charAt(i)+str.charAt(i+1)+str.charAt(i+2)+str.charAt(i+3) == "orig"){
             strIndex++;
@@ -242,7 +236,6 @@ app.post('/mod_call', urlencodedParser,function (req, res){
             arr[strIndex] += str.charAt(i);
         }
     }
-    //console.log(str);
     var opt_arr = [];
     for(i=0;i<arr.length;i++){
         if(arr[i] != 'arr' && arr[i] != 'data' && arr[i] != '' && arr[i] != 'original_arr') opt_arr.push(arr[i]);
@@ -250,8 +243,6 @@ app.post('/mod_call', urlencodedParser,function (req, res){
     res.end();
     var actual_table_names = [];
     var sql = `UPDATE ${arr[1]} SET`;
-
-    //console.log(opt_arr);
 
     con.query(`DESCRIBE ${opt_arr[1]};`, (error, result) => {
         if (error) throw error;
@@ -406,4 +397,6 @@ select fejleszto.name, SUM(javitasok.storyPoint) from fejleszto, korabbi_javitas
 X fejleszto, milyen bugon milyen joggal van:
 SELECT javitasok.id, fejleszto.name, admin, sudoer, editor FROM javitasok, fejleszto, jogosultsag, korabbi_javitasok WHERE javitasok.id = korabbi_javitasok.id AND fejleszto.email = korabbi_javitasok.fejleszto_email AND fejleszto.pos = jogosultsag.pos GROUP BY javitasok.id ORDER BY fejleszto.name;
 
+
+SELECT fejleszto.name, sub.cim FROM fejleszto, (SELECT cim, fejleszto_email as email FROM hibaBejelentes, korabbi_javitasok WHERE ticketSorszam = id) as sub WHERE sub.email = fejleszto.email AND fejleszto.name = '${arr[1]}' GROUP BY sub.cim;
 */  
